@@ -1,1 +1,1 @@
-# Leadership App
+# Leaderboard
