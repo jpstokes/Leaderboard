@@ -41,6 +41,15 @@ RSpec.describe LeaderboardController, :type => :controller do
       get :index, size: 101
       expect(response.status).to eq 404
     end
+
+    it 'returns items in order' do
+    end
+
+    it 'returns 404 when offset is greater or equal to size' do
+      (1..101).each { |i| Leaderboard.create(name: "Foo#{i}", score: i) }
+      get :index, size: 12, offset: 13
+      expect(response.status).to eq 404
+    end
   end
 
   describe '#create' do

@@ -2,22 +2,20 @@ class LeaderboardController < ApplicationController
 
   def index
     name = leaderboard_params[:name]
-    size = leaderboard_params[:size].try(:to_i)
-    offset = leaderboard_params[:offset].try(:to_i)
+    size = leaderboard_params[:size].try(:to_i) || 10
+    offset = leaderboard_params[:offset].try(:to_i) || 0
 
     if name
-      leaderboards = [Leaderboard.find_by_name(name)]
+      leaderboards = [Leaderboard.find_by_name(name)].compact
     else
-      size = 10 if size.nil?
-      size = size - offset if offset
-
-      leaderboards = Leaderboard.all.limit(size)
+      size = size - offset
+      leaderboards = Leaderboard.all.limit(size).order(rank: :asc)
     end
 
-    if leaderboards.any? && (size.nil? || size <= 100)
-      render json: leaderboards
-    else
+    if leaderboards.nil? || size > 100 || offset >= size || leaderboards.empty?
       render nothing: true, status: 404
+    else
+      render json: leaderboards
     end
   end
 
