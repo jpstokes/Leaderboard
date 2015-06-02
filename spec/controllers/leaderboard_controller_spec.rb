@@ -7,12 +7,26 @@ RSpec.describe LeaderboardController, :type => :controller do
       Leaderboard.create(name: 'John Doe', score: 20)
       get :index, name: 'John Doe'
       result = JSON.parse(response.body)
-      expect(result['score']).to eq 20
+      expect(result[0]['score']).to eq 20
     end
 
     it 'returns 404 if user is not found' do
       get :index, name: 'Jane Doe'
       expect(response.status).to eq 404
+    end
+
+    it 'returns the default number of records (10)' do
+      (1..11).each { |i| Leaderboard.create(name: "Foo#{i}", score: i) }
+      get :index
+      result = JSON.parse(response.body)
+      expect(result.count).to eq 10
+    end
+
+    it 'returns 5 records as specified' do
+      (1..11).each { |i| Leaderboard.create(name: "Foo#{i}", score: i) }
+      get :index, size: 5
+      result = JSON.parse(response.body)
+      expect(result.count).to eq 5
     end
   end
 
