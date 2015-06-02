@@ -15,4 +15,25 @@ RSpec.describe LeaderboardController, :type => :controller do
       expect(response.status).to eq 404
     end
   end
+
+  describe '#create' do
+    it 'will record the score of the named entity' do
+      expect(Leaderboard.count).to eq 0
+      post :create, { name: 'John Doe', score: 20 }
+      expect(Leaderboard.count).to eq 1
+      expect(Leaderboard.first.name).to eq 'John Doe'
+      expect(Leaderboard.first.score).to eq 20
+      expect(response.status).to eq 200
+    end
+
+    it 'will update the named entity if the user already exists' do
+      Leaderboard.create(name: 'Janice Doe', score: 20)
+      expect(Leaderboard.count).to eq 1
+      post :create, { name: 'Janice Doe', score: 25 }
+      expect(Leaderboard.count).to eq 1
+      expect(Leaderboard.first.name).to eq 'Janice Doe'
+      expect(Leaderboard.first.score).to eq 25
+      expect(response.status).to eq 200
+    end
+  end
 end

@@ -1,4 +1,5 @@
 class LeaderboardController < ApplicationController
+
   def index
     leaderboard = Leaderboard.find_by_name(params[:name])
     if leaderboard
@@ -8,9 +9,16 @@ class LeaderboardController < ApplicationController
     end
   end
 
+  def create
+    leaderboard = Leaderboard.find_or_create_by(name: leaderboard_params[:name])
+    leaderboard.score = leaderboard_params[:score]
+    leaderboard.save
+    render nothing: true, status: 200
+  end
+
   private
 
   def leaderboard_params
-    params.require(:leaderbaord).permit [:name, :score]
+    params.permit [:name, :score]
   end
 end
