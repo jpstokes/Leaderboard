@@ -8,4 +8,5 @@ RSpec.describe Leaderboard, :type => :model do
 
   it { should respond_to :name }
   it { should respond_to :score }
+  it { should respond_to :rank }
 end

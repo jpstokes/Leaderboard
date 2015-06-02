@@ -28,6 +28,19 @@ RSpec.describe LeaderboardController, :type => :controller do
       result = JSON.parse(response.body)
       expect(result.count).to eq 5
     end
+
+    it 'returns default size with an offset of 1 records as specified' do
+      (1..11).each { |i| Leaderboard.create(name: "Foo#{i}", score: i) }
+      get :index, offset: 1
+      result = JSON.parse(response.body)
+      expect(result.count).to eq 9
+    end
+
+    it 'returns 404 when size greater than 100' do
+      (1..101).each { |i| Leaderboard.create(name: "Foo#{i}", score: i) }
+      get :index, size: 101
+      expect(response.status).to eq 404
+    end
   end
 
   describe '#create' do
