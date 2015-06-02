@@ -55,4 +55,5 @@ Rails.application.routes.draw do
   #   end
   get '/', to: 'leaderboard#index'
   post '/', to: 'leaderboard#create'
+  delete '/', to: 'leaderboard#destroy'
 end

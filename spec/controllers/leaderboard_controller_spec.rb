@@ -72,4 +72,20 @@ RSpec.describe LeaderboardController, :type => :controller do
       expect(response.status).to eq 200
     end
   end
+
+  describe '#destroy' do
+    it 'removes item from system' do
+      Leaderboard.create(name: 'Janice Doe', score: 20)
+      expect(Leaderboard.count).to eq 1
+      post :destroy, name: 'Janice Doe'
+      expect(Leaderboard.count).to eq 0
+      expect(response.status).to eq 200
+    end
+
+    it 'returns a 404 when not found' do
+      post :destroy, name: 'John Doe'
+      expect(Leaderboard.count).to eq 0
+      expect(response.status).to eq 404
+    end
+  end
 end

@@ -26,6 +26,15 @@ class LeaderboardController < ApplicationController
     render nothing: true, status: 200
   end
 
+  def destroy
+    leaderboard = Leaderboard.where(name: leaderboard_params[:name]).first
+    if leaderboard && leaderboard.destroy
+      render nothing: true, status: 200
+    else
+      render nothing: true, status: 404
+    end
+  end
+
   private
 
   def leaderboard_params
