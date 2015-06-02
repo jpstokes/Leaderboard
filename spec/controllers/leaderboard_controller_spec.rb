@@ -4,10 +4,11 @@ RSpec.describe LeaderboardController, :type => :controller do
 
   describe '#index' do
     it 'return the score and rank of the user' do
-      Leaderboard.create(name: 'John Doe', score: 20)
+      Leaderboard.create(name: 'John Doe', score: 20, rank: 1)
       get :index, name: 'John Doe'
       result = JSON.parse(response.body)
       expect(result[0]['score']).to eq 20
+      expect(result[0]['rank']).to eq 1
     end
 
     it 'returns 404 if user is not found' do
