@@ -8,11 +8,10 @@ class LeaderboardController < ApplicationController
     if name
       leaderboards = [Leaderboard.find_by_name(name)].compact
     else
-      size = size - offset
-      leaderboards = Leaderboard.all.limit(size).order(rank: :asc)
+      leaderboards = Leaderboard.all.offset(offset).limit(size).order(rank: :asc)
     end
 
-    if size > 100 || offset >= size || leaderboards.empty?
+    if size > 100 || offset > Leaderboard.count - 1
       render nothing: true, status: 404
     else
       render json: leaderboards

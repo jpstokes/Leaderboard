@@ -34,7 +34,7 @@ RSpec.describe LeaderboardController, :type => :controller do
       (1..11).each { |i| Leaderboard.create(name: "Foo#{i}", score: i) }
       get :index, offset: 1
       result = JSON.parse(response.body)
-      expect(result.count).to eq 9
+      expect(result.count).to eq 10
     end
 
     it 'returns 404 when size greater than 100' do
@@ -43,12 +43,9 @@ RSpec.describe LeaderboardController, :type => :controller do
       expect(response.status).to eq 404
     end
 
-    it 'returns items in order' do
-    end
-
-    it 'returns 404 when offset is greater or equal to size' do
-      (1..101).each { |i| Leaderboard.create(name: "Foo#{i}", score: i) }
-      get :index, size: 12, offset: 13
+    it 'returns 404 when offset out of range' do
+      (1..50).each { |i| Leaderboard.create(name: "Foo#{i}", score: i) }
+      get :index, offset: 50
       expect(response.status).to eq 404
     end
   end
