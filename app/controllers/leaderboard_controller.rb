@@ -12,7 +12,7 @@ class LeaderboardController < ApplicationController
       leaderboards = Leaderboard.all.limit(size).order(rank: :asc)
     end
 
-    if leaderboards.nil? || size > 100 || offset >= size || leaderboards.empty?
+    if size > 100 || offset >= size || leaderboards.empty?
       render nothing: true, status: 404
     else
       render json: leaderboards
