@@ -2,9 +2,12 @@ require 'rails_helper'
 
 RSpec.describe UserController, :type => :controller do
 
+  before { Redis.current.flushdb }
+
   describe '#index' do
     it 'return the score and rank of the user' do
-      User.create(name: 'John Doe', score: 20, rank: 1)
+      user = User.create(name: 'John Doe')
+      Leaderboard.add_member(user.id, 20)
       get :index, name: 'John Doe'
       result = JSON.parse(response.body)
       expect(result[0]['score']).to eq 20
@@ -31,7 +34,7 @@ RSpec.describe UserController, :type => :controller do
     end
 
     it 'returns default size with an offset of 1 records as specified' do
-      (1..11).each { |i| User.create(name: "Foo#{i}", rank: i, score: i) }
+      (1..11).each { |i| User.create(name: "Foo#{i}", score: i) }
       get :index, offset: 1
       result = JSON.parse(response.body)
       expect(result.count).to eq 10

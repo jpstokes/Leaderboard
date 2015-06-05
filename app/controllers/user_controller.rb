@@ -6,7 +6,7 @@ class UserController < ApplicationController
     offset = user_params[:offset].try(:to_i) || 0
     users =
       if name
-        [User.find_by_name(name)].compact
+        [User.score_and_rank(name)]
       else
         User.all.offset(offset).limit(size).order(rank: :asc)
       end
@@ -20,14 +20,15 @@ class UserController < ApplicationController
 
   def create
     user = User.find_or_create_by(name: user_params[:name])
-    user.score = user_params[:score]
-    user.save
+    user.set_score user_params[:score]
     render nothing: true, status: 200
   end
 
   def destroy
     user = User.where(name: user_params[:name]).first
-    if user && user.destroy
+    if user
+      user.remove_user
+      user.destroy
       render nothing: true, status: 200
     else
       render nothing: true, status: 404
