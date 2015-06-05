@@ -17,7 +17,7 @@ RSpec.describe Leaderboard, :type => :model do
   end
 
   describe '#get_member_rank' do
-    it 'returns rank of 2 for user' do
+    it 'returns rank of 1 for user' do
       user = User.create(name: 'John Doe')
       user.score = 20
       expect(Leaderboard.get_member_rank(user.id)).to eq 1
