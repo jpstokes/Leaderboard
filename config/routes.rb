@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  get '/', to: 'user#index'
-  post '/', to: 'user#create'
-  delete '/', to: 'user#destroy'
+  get '/', to: 'users#index'
+  post '/', to: 'users#create'
+  delete '/', to: 'users#destroy'
 end
