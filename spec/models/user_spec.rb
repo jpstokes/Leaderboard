@@ -10,7 +10,24 @@ RSpec.describe User, :type => :model do
 
   before { Redis.current.flushdb }
 
-  describe '#rank_users' do
+  describe '#score' do
+    it 'sets the score properly' do
+      user = User.create(name: 'John Doe')
+      user.score = 21
+      expect(Leaderboard.get_score(user.id).to_i).to eq 21
+    end
+  end
+
+  describe '#remove_user' do
+    it 'removes the user' do
+      user = User.create(name: 'John Doe')
+      user.score = 21
+      user.remove_user
+      expect(user.score).to eq nil
+    end
+  end
+
+  describe '#rank' do
     before do
       user = User.create(name: 'John Doe')
       user.score = 20
@@ -33,6 +50,31 @@ RSpec.describe User, :type => :model do
     it 'returns the rank of 3 for users' do
       expect(User.where(name: 'John Doe').first.rank).to eq 4
       expect(User.where(name: 'Jane Doe').first.rank).to eq 3
+    end
+  end
+
+  describe '#score_and_rank' do
+    it 'returns rank and score' do
+      user = User.create(name: 'John Doe')
+      user.score = 21
+      expect(User.score_and_rank(user.name)).to eq({ rank: 1, score: 21 })
+    end
+  end
+
+  describe '#get_range' do
+    before do
+      user = User.create(name: 'John Doe')
+      user.score = 20
+      user = User.create(name: 'Jane Doe')
+      user.score = 20
+      user = User.create(name: 'Bob Doe')
+      user.score = 22
+      user = User.create(name: 'Joe Doe')
+      user.score = 21
+    end
+
+    it 'returns all user in the given range' do
+      expect(User.get_range(0, 2)).to eq 3
     end
   end
 end
