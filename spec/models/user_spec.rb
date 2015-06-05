@@ -74,7 +74,8 @@ RSpec.describe User, :type => :model do
     end
 
     it 'returns all user in the given range' do
-      expect(User.get_range(0, 2)).to eq 3
+      expect(User.get_range(0, 2))
+        .to eq "[{\"name\":\"Bob Doe\",\"score\":\"22\",\"rank\":1},{\"name\":\"Joe Doe\",\"score\":\"21\",\"rank\":2},{\"name\":\"Jane Doe\",\"score\":\"20\",\"rank\":3}]"
     end
   end
 end
