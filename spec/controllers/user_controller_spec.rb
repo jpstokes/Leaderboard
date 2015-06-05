@@ -20,21 +20,21 @@ RSpec.describe UserController, :type => :controller do
     end
 
     it 'returns the default number of records (10)' do
-      (1..11).each { |i| User.create(name: "Foo#{i}", score: i) }
+      create_users 11
       get :index
       result = JSON.parse(response.body)
       expect(result.count).to eq 10
     end
 
     it 'returns 5 records as specified' do
-      (1..11).each { |i| User.create(name: "Foo#{i}", score: i) }
+      create_users 11
       get :index, size: 5
       result = JSON.parse(response.body)
       expect(result.count).to eq 5
     end
 
     it 'returns default size with an offset of 1 records as specified' do
-      (1..11).each { |i| User.create(name: "Foo#{i}", score: i) }
+      create_users 11
       get :index, offset: 1
       result = JSON.parse(response.body)
       expect(result.count).to eq 10
@@ -43,13 +43,13 @@ RSpec.describe UserController, :type => :controller do
     end
 
     it 'returns 404 when size greater than 100' do
-      (1..101).each { |i| User.create(name: "Foo#{i}", score: i) }
+      create_users 101
       get :index, size: 101
       expect(response.status).to eq 404
     end
 
     it 'returns 404 when offset out of range' do
-      (1..50).each { |i| User.create(name: "Foo#{i}", score: i) }
+      create_users 50
       get :index, offset: 50
       expect(response.status).to eq 404
     end
@@ -61,7 +61,7 @@ RSpec.describe UserController, :type => :controller do
       post :create, { name: 'John Doe', score: 20 }
       expect(User.count).to eq 1
       expect(User.first.name).to eq 'John Doe'
-      expect(User.first.score).to eq 20
+      expect(Leaderboard.get_score(User.first.id).to_i).to eq 20
       expect(response.status).to eq 200
     end
 
@@ -71,7 +71,7 @@ RSpec.describe UserController, :type => :controller do
       post :create, { name: 'Janice Doe', score: 25 }
       expect(User.count).to eq 1
       expect(User.first.name).to eq 'Janice Doe'
-      expect(User.first.score).to eq 25
+      expect(Leaderboard.get_score(User.first.id).to_i).to eq 25
       expect(response.status).to eq 200
     end
   end
@@ -89,6 +89,13 @@ RSpec.describe UserController, :type => :controller do
       post :destroy, name: 'John Doe'
       expect(User.count).to eq 0
       expect(response.status).to eq 404
+    end
+  end
+
+  def create_users(num)
+    (1..num).each do |i|
+      user = User.create(name: "Foo#{i}")
+      user.score = i
     end
   end
 end

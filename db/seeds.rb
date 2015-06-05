@@ -5,4 +5,4 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-100.times { |x| User.create(name: Faker::Name.name, score: Faker::Number.number(2)) }
+100.times { |x| User.create(name: Faker::Name.name) }

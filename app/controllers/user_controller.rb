@@ -8,7 +8,7 @@ class UserController < ApplicationController
       if name
         [User.score_and_rank(name)]
       else
-        User.all.offset(offset).limit(size).order(rank: :asc)
+        User.get_range(offset, offset + size - 1)
       end
 
     if size > 100 || offset > User.count - 1
@@ -20,7 +20,7 @@ class UserController < ApplicationController
 
   def create
     user = User.find_or_create_by(name: user_params[:name])
-    user.set_score user_params[:score]
+    user.score =  user_params[:score]
     render nothing: true, status: 200
   end
 

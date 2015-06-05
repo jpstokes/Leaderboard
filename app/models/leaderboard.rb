@@ -16,6 +16,6 @@ class Leaderboard
   end
 
   def self.get_range(start, stop)
-    Redis.current.zrange("leaderboard", start, stop)
+    Redis.current.zrevrange("leaderboard", start, stop, with_scores: true)
   end
 end

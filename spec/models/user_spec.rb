@@ -7,38 +7,31 @@ RSpec.describe User, :type => :model do
   subject { user }
 
   it { should respond_to :name }
-  it { should respond_to :score }
-  it { should respond_to :rank }
+
+  before { Redis.current.flushdb }
 
   describe '#rank_users' do
-    it 'returns rank of 2 for user' do
-      User.create(name: 'John Doe', score: 20)
-      User.create(name: 'Jane Doe', score: 20)
-      User.create(name: 'Bob Doe', score: 22)
-      User.create(name: 'Joe Doe', score: 21)
-      User.rank_users
+    before do
+      user = User.create(name: 'John Doe')
+      user.score = 20
+      user = User.create(name: 'Jane Doe')
+      user.score = 20
+      user = User.create(name: 'Bob Doe')
+      user.score = 22
+      user = User.create(name: 'Joe Doe')
+      user.score = 21
+    end
 
+    it 'returns rank of 2 for user' do
       expect(User.where(name: 'Joe Doe').first.rank).to eq 2
     end
 
     it 'returns the rank of 1 for user' do
-      User.create(name: 'John Doe', score: 20)
-      User.create(name: 'Jane Doe', score: 20)
-      User.create(name: 'Bob Doe', score: 22)
-      User.create(name: 'Joe Doe', score: 21)
-      User.rank_users
-
       expect(User.where(name: 'Bob Doe').first.rank).to eq 1
     end
 
     it 'returns the rank of 3 for users' do
-      User.create(name: 'John Doe', score: 20)
-      User.create(name: 'Jane Doe', score: 20)
-      User.create(name: 'Bob Doe', score: 22)
-      User.create(name: 'Joe Doe', score: 21)
-      User.rank_users
-
-      expect(User.where(name: 'John Doe').first.rank).to eq 3
+      expect(User.where(name: 'John Doe').first.rank).to eq 4
       expect(User.where(name: 'Jane Doe').first.rank).to eq 3
     end
   end
