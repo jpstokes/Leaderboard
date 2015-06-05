@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Leaderboard, :type => :model do
+RSpec.describe User, :type => :model do
 
-  let(:leaderboard) { Leaderboard.new }
+  let(:user) { User.new }
 
-  subject { leaderboard }
+  subject { user }
 
   it { should respond_to :name }
   it { should respond_to :score }
