@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
     if user
       rank = Leaderboard.get_member_rank(user.id).to_i
       score = Leaderboard.get_score(user.id).to_i
-      return { 'rank': rank, 'score': score }
+      return { rank: rank, score: score }
     end
   end
 
