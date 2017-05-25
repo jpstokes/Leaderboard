@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  validates :name, presence: true
+
   def score=(score)
     Leaderboard.add_member(id, score)
   end
@@ -13,7 +15,7 @@ class User < ActiveRecord::Base
   end
 
   def self.score_and_rank(name)
-    user = User.where(name: name).first
+    user = User.where('lower(name) = ?', name.downcase).first
     if user
       rank = Leaderboard.get_member_rank(user.id).to_i
       score = Leaderboard.get_score(user.id).to_i

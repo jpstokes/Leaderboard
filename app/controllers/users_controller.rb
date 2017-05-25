@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
 
   def index
-    name = user_params[:name]
-    size = user_params[:size].try(:to_i) || 10
-    offset = user_params[:offset].try(:to_i) || 0
+    name = params[:name]
+    size = params[:size].try(:to_i) || 10
+    offset = params[:offset].try(:to_i) || 0
     users =
       if name
         [User.score_and_rank(name)]
