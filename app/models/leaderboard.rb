@@ -4,7 +4,9 @@ class Leaderboard
   end
 
   def self.get_member_rank(user_id)
-    Redis.current.zrevrank("leaderboard", user_id) + 1
+    rank = Redis.current.zrevrank("leaderboard", user_id)
+    return unless rank
+    rank + 1
   end
 
   def self.get_score(user_id)

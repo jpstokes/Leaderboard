@@ -10,7 +10,7 @@ RSpec.describe User, :type => :model do
 
   before { Redis.current.flushdb }
 
-  describe '#score' do
+  describe '#score=' do
     it 'sets the score properly' do
       user = User.create(name: 'John Doe')
       user.score = 21
@@ -23,7 +23,7 @@ RSpec.describe User, :type => :model do
       user = User.create(name: 'John Doe')
       user.score = 21
       user.remove_user
-      expect(user.score).to eq nil
+      expect(User.score_and_rank('John Doe')).to eq nil
     end
   end
 

@@ -16,11 +16,11 @@ class User < ActiveRecord::Base
 
   def self.score_and_rank(name)
     user = User.where('lower(name) = ?', name.downcase).first
-    if user
-      rank = Leaderboard.get_member_rank(user.id).to_i
-      score = Leaderboard.get_score(user.id).to_i
-      return { rank: rank, score: score }
-    end
+    return unless user
+    rank = Leaderboard.get_member_rank(user.id).try(:to_i)
+    score = Leaderboard.get_score(user.id).try(:to_i)
+    return unless rank && score
+    { rank: rank, score: score }
   end
 
   def self.get_range(start, stop)

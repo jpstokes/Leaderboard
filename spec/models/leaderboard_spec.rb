@@ -29,7 +29,7 @@ RSpec.describe Leaderboard, :type => :model do
       user = User.create(name: 'John Doe')
       user.score = 21
       Leaderboard.remove_member(user.id)
-      expect(user.score).to eq nil
+      expect(User.score_and_rank('John Doe')).to eq nil
     end
   end
 
