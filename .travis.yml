@@ -1,0 +1,6 @@
+services:
+  - postgresql
+  - leaderboard_test
+before_script:
+  - psql -c 'create database leaderboard_test;' -U postgres
+
