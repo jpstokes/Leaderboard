@@ -1,6 +1,6 @@
 services:
   - postgresql
   - leaderboard_test
+  - redis-server
 before_script:
   - psql -c 'create database leaderboard_test;' -U postgres
-
